@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PhatBanking Mobile - Cyberpunk Control Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+         :root {
+            --bg-system: #03050a;
+            --bg-card: #070b14;
+            --bg-card-light: #0f1626;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --gold: #f59e0b;
+            --blue: #3b82f6;
+            --green: #10b981;
+            --red: #f43f5e;
+            --purple: #a855f7;
+            --orange: #f97316;
+            --cyber-neon: #00ffcc;
+            --border: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: var(--bg-system);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* --- APP HEADER --- */
+        
+        .app-header {
+            height: 56px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        .brand-mobile {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: white;
+        }
+        
+        .brand-mobile span {
+            color: var(--red);
+        }
+        /* --- MAIN MOBILE CONTAINER --- */
+        
+        .app-container {
+            flex: 1;
+            margin-top: 56px;
+            margin-bottom: 60px;
+            /* Chừa chỗ cho bottom nav */
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        /* --- BOTTOM NAVIGATION BAR --- */
+        
+        .bottom-nav {
+            height: 60px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-decoration: none;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 33%;
+            height: 100%;
+            justify-content: center;
+        }
+        
+        .nav-item.active {
+            color: var(--cyber-neon);
+        }
+        
+        .nav-item i {
+            font-size: 1.15rem;
+        }
+        /* --- MOBILE VIEW TABS --- */
+        
+        .app-tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        .app-tab-content.active {
+            display: flex;
+        }
+        /* --- MOBILE STATS SLIDER / GRID --- */
+        
+        .stats-grid-mobile {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .stat-card-mini {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .stat-card-mini p {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        
+        .stat-card-mini h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        /* ==================== CASINO BACCARAT MOBILE LAYOUT ==================== */
+        
+        .baccarat-container-mobile {
+            background: linear-gradient(135deg, #020b12 0%, #010408 100%);
+            border: 1px solid #102a3f;
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .bc-mobile-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .bc-side-mobile {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 10px;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .bc-side-mobile.player {
+            border-left: 3px solid var(--blue);
+        }
+        
+        .bc-side-mobile.banker {
+            border-left: 3px solid var(--red);
+        }
+        
+        .winner-flash-p {
+            animation: flash-p 0.5s infinite alternate;
+        }
+        
+        .winner-flash-b {
+            animation: flash-b 0.5s infinite alternate;
+        }
+        
+        @keyframes flash-p {
+            0% {
+                background: rgba(59, 130, 246, 0.05);
+            }
+            100% {
+                background: rgba(59, 130, 246, 0.2);
+            }
+        }
+        
+        @keyframes flash-b {
+            0% {
+                background: rgba(244, 63, 94, 0.05);
+            }
+            100% {
+                background: rgba(244, 63, 94, 0.2);
+            }
+        }
+        
+        .bc-cards-mobile {
+            display: flex;
+            gap: 4px;
+            margin: 6px 0;
+            min-height: 46px;
+            align-items: center;
+        }
+        
+        .bc-card-item {
+            width: 32px;
+            height: 44px;
+            background: #ffffff;
+            border-radius: 4px;
+            color: #111827;
+            font-weight: 800;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d1d5db;
+            animation: draw-card 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        
+        .bc-card-item.red-suit {
+            color: var(--red);
+        }
+        
+        @keyframes draw-card {
+            0% {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Thẻ trợ lý AI & Active Users trên Mobile đặt chung hàng */
+        
+        .assistant-active-row {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 8px;
+        }
+        
+        .assistant-card-mobile {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        
+        .avatar-mobile-wrapper {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+        }
+        
+        .avatar-mobile {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--cyber-neon);
+            object-fit: cover;
+        }
+        
+        .avatar-mobile.blinking {
+            transform: scaleY(0.05);
+        }
+        
+        .avatar-mobile.acting {
+            animation: jump-m 0.4s ease;
+        }
+        
+        @keyframes jump-m {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+        
+        .bubble-mobile {
+            position: absolute;
+            top: -36px;
+            left: 10px;
+            background: var(--purple);
+            color: white;
+            font-size: 0.6rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .bubble-mobile.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Lá bài đồ họa Active 3D tối ưu cho Mobile */
+        
+        .active-card-mobile {
+            background: linear-gradient(145deg, #08111a 0%, #03070d 100%);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6px;
+            text-align: center;
+            transition: transform 0.1s ease;
+        }
+        
+        .bc-roadmap-mobile {
+            display: flex;
+            gap: 3px;
+            overflow-x: auto;
+            padding: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+        }
+        
+        .dot-result {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .dot-p {
+            background: var(--blue);
+        }
+        
+        .dot-b {
+            background: var(--red);
+        }
+        
+        .dot-t {
+            background: var(--green);
+        }
+        /* --- MOBILE LIST CARD LAYOUTS --- */
+        
+        .panel-mobile {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+        }
+        
+        .panel-title-m {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .mobile-list-item {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .item-info-left h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .item-info-left p {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .item-info-right {
+            text-align: right;
+        }
+        
+        .type-badge {
+            font-size: 0.58rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .badge-deposit {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+        }
+        
+        .badge-withdraw {
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--red);
+        }
+        
+        .badge-vip {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--gold);
+            font-size: 0.55rem;
+            padding: 0 3px;
+            margin-left: 2px;
+        }
+        /* Khung tương tác quản lý người chơi dạng thẻ vuốt dọc */
+        
+        .player-card-m {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .p-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+        
+        .p-card-actions {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .btn-m {
+            padding: 6px 10px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .btn-purple {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--purple);
+        }
+        
+        .btn-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+        }
+        
+        .btn-danger {
+            background: rgba(244, 63, 94, 0.2);
+            color: var(--red);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card-light);
+            color: var(--text-main);
+        }
+        
+        .btn-cheat {
+            background: #111827;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            border-radius: 50px;
+        }
+        
+        .btn-cheat.active-cheat-p {
+            background: rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+            border-color: var(--blue);
+        }
+        
+        .btn-cheat.active-cheat-b {
+            background: rgba(244, 63, 94, 0.25);
+            color: #fca5a5;
+            border-color: var(--red);
+        }
+        
+        .admin-input-m {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            width: 100%;
+        }
+        
+        .filter-scroller {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .btn-filter-m {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            border-radius: 50px;
+            white-space: nowrap;
+        }
+        
+        .btn-filter-m.active {
+            background: var(--purple);
+            color: white;
+            border-color: var(--purple);
+        }
+        /* Radar mờ cố định ở Tab Live */
+        
+        .radar-box-m {
+            background: rgba(168, 85, 247, 0.03);
+            border: 1px dashed var(--purple);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.72rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="app-header">
+        <div class="brand-mobile"><i class="fa-solid fa-dice"></i> Phat<span>Bank</span> 👑</div>
+        <div id="baccaratStatusText" style="font-size:0.72rem; font-weight:700; color:var(--gold);">Khởi tạo...</div>
+    </header>
+
+    <div class="app-container">
+
+        <div id="tab-baccarat" class="app-tab-content active">
+
+            <section class="stats-grid-mobile">
+                <div class="stat-card-mini">
+                    <p>Doanh thu sàn</p>
+                    <h3 id="statRevenue" style="color: var(--green);">0đ</h3>
+                </div>
+                <div class="stat-card-mini">
+                    <p>Hàng đợi lệnh</p>
+                    <h3 id="statPendingCount" style="color: var(--gold);">0 Lệnh</h3>
+                </div>
+            </section>
+
+            <section class="baccarat-container-mobile">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--cyber-neon);"><i class="fa-solid fa-headset"></i> STUDIO PORTAL 🟢 1,000</span>
+                    <div style="display:flex; gap:3px;">
+                        <button id="cheatBtn-P" class="btn-cheat" onclick="setBaccaratRig('P')">Ép P</button>
+                        <button id="cheatBtn-B" class="btn-cheat" onclick="setBaccaratRig('B')">Ép B</button>
+                        <button id="cheatBtn-none" class="btn-cheat" onclick="setBaccaratRig('none')">Auto</button>
+                    </div>
+                </div>
+
+                <div class="bc-mobile-row">
+                    <div class="bc-side-mobile player" id="uiSidePlayer">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#60a5fa; font-size:0.7rem; font-weight:700;">PLAYER</span>
+                            <span class="dot-result dot-p" id="scorePlayer" style="width:18px; height:18px; font-size:0.7rem;">0</span>
+                        </div>
+                        <div class="bc-cards-mobile" id="cardsPlayer"></div>
+                        <div style="font-size:0.6rem; color:var(--text-muted);" id="betTotalPlayer">Cược: 0đ</div>
+                    </div>
+
+                    <div class="bc-side-mobile banker" id="uiSideBanker">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#f87171; font-size:0.7rem; font-weight:700;">BANKER</span>
+                            <span class="dot-result dot-b" id="scoreBanker" style="width:18px; height:18px; font-size:0.7rem;">0</span>
+                        </div>
+                        <div class="bc-cards-mobile" id="cardsBanker"></div>
+                        <div style="font-size:0.6rem; color:var(--text-muted);" id="betTotalBanker">Cược: 0đ</div>
+                    </div>
+                </div>
+
+                <div class="assistant-active-row">
+                    <div class="assistant-card-mobile" onclick="triggerAssistantInteraction()">
+                        <div class="bubble-mobile" id="assistantSpeech">Sẵn sàng!</div>
+                        <div class="avatar-mobile-wrapper">
+                            <img id="assistantImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Elena" class="avatar-mobile">
+                        </div>
+                        <div>
+                            <h4 style="font-size:0.7rem; font-weight:700;">Elena AI</h4>
+                            <p style="font-size:0.55rem; color:var(--text-muted);" id="assistantStateLabel">Nhận cược...</p>
+                        </div>
+                    </div>
+
+                    <div class="active-card-mobile" id="activeCyberCard">
+                        <span style="font-size:1.1rem; font-weight:900; color:white;" id="activeUserCount">1,000</span>
+                        <span style="font-size:0.52rem; font-weight:700; color:var(--cyber-neon); letter-spacing:0.5px; text-transform:uppercase; margin-top:2px;">Active Users</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="bc-roadmap-mobile" id="baccaratRoadmap"></div>
+                </div>
+            </section>
+
+            <div class="radar-box-m">
+                <div id="radarTargetName" style="font-weight:700; color:white; font-size:0.78rem;">Chưa chọn tiêu điểm</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; margin-top:4px; color:var(--text-muted); gap:2px;">
+                    <span id="radarTargetUID">UID: N/A</span>
+                    <span id="radarTargetStatus">Trạng thái: N/A</span>
+                    <span id="radarTargetLimit" style="color:var(--orange);">Hạn mức: Vô song</span>
+                    <span id="radarTargetBalance" style="color:var(--green); font-weight:700;">Số dư: 0đ</span>
+                </div>
+                <button id="radarQuickUnlockAction" class="btn-m btn-success" style="width:100%; margin-top:6px; display:none;" onclick="globalQuickUnlock()">Kích Hoạt Lại Ngay</button>
+            </div>
+
+            <div class="panel-mobile">
+                <div class="panel-title-m">📋 Kết quả ván đấu vừa qua</div>
+                <div class="mobile-data-list" id="baccaratHistoryLogTableMobile"></div>
+            </div>
+
+        </div>
+
+        <div id="tab-queue" class="app-tab-content">
+            <div class="panel-mobile">
+                <div class="panel-title-m">
+                    <span>⚡ Luồng Auto-Bot Lệnh Chờ</span>
+                    <button class="btn-m btn-purple" style="padding:4px 8px;" onclick="injectMockOrder()"><i class="fa-solid fa-plus"></i> Bơm lệnh</button>
+                </div>
+                <div class="mobile-data-list" id="pendingTransactionsMobileList"></div>
+            </div>
+
+            <div class="panel-mobile">
+                <div class="panel-title-m">📈 Nhật Ký Biến Động Sổ Cái</div>
+                <div class="mobile-data-list" id="liveCashFlowMobileList"></div>
+            </div>
+        </div>
+
+        <div id="tab-players" class="app-tab-content">
+            <div class="panel-mobile" style="display:flex; flex-direction:column; gap:8px;">
+                <input type="text" id="playerSearchInput" class="admin-input-m" placeholder="🔍 Tìm kiếm Tên hoặc UID người chơi..." oninput="renderInterface()">
+
+                <div class="filter-scroller">
+                    <button class="btn-filter-m active" id="filterBtn-all" onclick="setPlayerFilter('all')">Tất cả</button>
+                    <button class="btn-filter-m" id="filterBtn-limited" onclick="setPlayerFilter('limited')">Có hạn mức</button>
+                    <button class="btn-filter-m" id="filterBtn-high" onclick="setPlayerFilter('high')">&gt; 20M</button>
+                    <button class="btn-filter-m" id="filterBtn-banned" onclick="setPlayerFilter('banned')">Bị khóa</button>
+                </div>
+            </div>
+
+            <div class="panel-mobile">
+                <div class="panel-title-m">
+                    <span>Danh Sách Ví Quản Trị</span>
+                    <span id="totalFilterCounter" style="color:var(--purple); font-size:0.7rem;">1000 Users</span>
+                </div>
+                <div class="mobile-data-list" id="playerManagementMobileList" style="gap:8px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-btn-baccarat" onclick="switchMobileTab('baccarat')">
+            <i class="fa-solid fa-gamepad"></i>Live Studio
+        </button>
+        <button class="nav-item" id="nav-btn-queue" onclick="switchMobileTab('queue')">
+            <i class="fa-solid fa-layer-group"></i>Lệnh Chờ
+        </button>
+        <button class="nav-item" id="nav-btn-players" onclick="switchMobileTab('players')">
+            <i class="fa-solid fa-users-gear"></i>Ví Thành Viên
+        </button>
+    </nav>
+
+    <script>
+        // ENGINE TẠO MẪU DỮ LIỆU SÒNG BÀI 1000 USERS
+        function generateThousandPlayers() {
+            const lastNames = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Đặng", "Bùi"];
+            const middleNames = ["Văn", "Thị", "Anh", "Minh", "Đức", "Hồng", "Tuấn", "Khánh", "Ngọc", "Bảo"];
+            const firstNames = ["Long", "Vy", "Triệu", "Kiệt", "Ngọc", "Hải", "Dương", "Trang", "Phong", "Linh", "Quân"];
+            let list = [];
+
+            list.push({
+                id: "PRO_USER_01",
+                name: "Lê Hoàng Bảo Long",
+                account: "1098876543",
+                balance: 32000000,
+                status: "active",
+                isVip: true,
+                frozen: false,
+                txLimit: 50000000
+            });
+            list.push({
+                id: "PRO_USER_02",
+                name: "Đặng Thảo Vy",
+                account: "0071000941",
+                balance: 8500000,
+                status: "active",
+                isVip: false,
+                frozen: false,
+                txLimit: 0
+            });
+            list.push({
+                id: "PRO_USER_03",
+                name: "Nguyễn Khắc Triệu",
+                account: "1903442115",
+                balance: 184000000,
+                status: "active",
+                isVip: true,
+                frozen: false,
+                txLimit: 200000000
+            });
+            list.push({
+                id: "PRO_USER_04",
+                name: "Phạm Tuấn Kiệt",
+                account: "9998882221",
+                balance: 2100000,
+                status: "banned",
+                isVip: false,
+                frozen: true,
+                txLimit: 0
+            });
+
+            for (let i = 5; i <= 1000; i++) {
+                let ho = lastNames[Math.floor(Math.random() * lastNames.length)];
+                let dem = middleNames[Math.floor(Math.random() * middleNames.length)];
+                let ten = firstNames[Math.floor(Math.random() * firstNames.length)];
+                list.push({
+                    id: "PRO_USER_" + String(i).padStart(3, '0'),
+                    name: `${ho} ${dem} ${ten}`,
+                    account: "0" + Math.floor(100000000 + Math.random() * 900000000),
+                    balance: Math.random() > 0.9 ? Math.floor(21000000 + Math.random() * 65000000) : Math.floor(500000 + Math.random() * 2500000),
+                    status: Math.random() > 0.98 ? "banned" : "active",
+                    isVip: Math.random() > 0.96,
+                    frozen: Math.random() > 0.985,
+                    txLimit: Math.random() > 0.94 ? 25000000 : 0
+                });
+            }
+            return list;
+        }
+
+        function generateInitialQueue(players) {
+            let reqs = [];
+            for (let i = 0; i < 960; i++) {
+                let p = players[Math.floor(Math.random() * players.length)];
+                reqs.push({
+                    id: "TX_" + (10000 + i),
+                    pId: p.id,
+                    pName: p.name,
+                    type: Math.random() > 0.45 ? "deposit" : "withdraw",
+                    amount: [2000000, 5000000, 10000000][Math.floor(Math.random() * 3)],
+                    time: "Auto"
+                });
+            }
+            return reqs;
+        }
+
+        const SEED_PLAYERS = generateThousandPlayers();
+        const initialHistoryData = [{
+            round: 104,
+            winner: "Player",
+            score: "8 - 5",
+            profit: -12500000
+        }, {
+            round: 103,
+            winner: "Banker",
+            score: "4 - 7",
+            profit: 34000000
+        }, {
+            round: 102,
+            winner: "Banker",
+            score: "0 - 6",
+            profit: 18000000
+        }];
+
+        const DEFAULT_DB = {
+            revenue: 2190000000,
+            successCount: 9420,
+            blockedCount: 45,
+            focusedPlayerId: "PRO_USER_01",
+            players: SEED_PLAYERS,
+            pendingRequests: generateInitialQueue(SEED_PLAYERS),
+            cashFlowLogs: [{
+                name: "Hệ thống",
+                detail: "Khởi tạo kết toán Mobile Hub v11",
+                type: "in",
+                amount: 0,
+                time: "Core"
+            }],
+            roadmap: ["P", "B", "B", "T", "P", "B", "P", "P", "B", "P", "B", "B"],
+            riggedResult: "none",
+            baccaratHistory: initialHistoryData,
+            roundCounter: 104
+        };
+
+        let DB = JSON.parse(localStorage.getItem('PhatBanking_Mobile_v11')) || JSON.parse(JSON.stringify(DEFAULT_DB));
+        let currentPlayerFilter = 'all';
+
+        // CHUYỂN ĐỔI TAB TRÊN MOBILE AUDIO CHẠM MƯỢT
+        function switchMobileTab(tabId) {
+            document.querySelectorAll('.app-tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-btn-' + tabId).classList.add('active');
+        }
+
+        // BACCARAT ENGINE CHIA BÀI TỪ TỐN RÚT TỪNG LÁ MƯỢT MÀ
+        let baccaratState = {
+            phase: "betting",
+            timer: 10,
+            playerBet: 0,
+            bankerBet: 0
+        };
+        const suits = ["♠", "♣", "♦", "♥"];
+        const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+        function getCard() {
+            let rank = ranks[Math.floor(Math.random() * ranks.length)];
+            let suit = suits[Math.floor(Math.random() * suits.length)];
+            let val = parseInt(rank);
+            if (rank === "A") val = 1;
+            if (["10", "J", "Q", "K"].includes(rank)) val = 0;
+            return {
+                display: rank + suit,
+                value: val,
+                isRed: ["♦", "♥"].includes(suit)
+            };
+        }
+
+        function calculateBaccaratScore(cards) {
+            let total = cards.reduce((sum, c) => sum + c.value, 0);
+            return total % 10;
+        }
+
+        function setBaccaratRig(mode) {
+            DB.riggedResult = mode;
+            saveAndRender();
+        }
+
+        function runBaccaratEngine() {
+            const uiP = document.getElementById('uiSidePlayer');
+            const uiB = document.getElementById('uiSideBanker');
+            const astImage = document.getElementById('assistantImage');
+            const astState = document.getElementById('assistantStateLabel');
+
+            if (baccaratState.phase === "betting") {
+                baccaratState.timer--;
+                document.getElementById('baccaratStatusText').innerHTML = `<i class="fa-solid fa-clock fa-spin"></i> Cược: ${baccaratState.timer}s`;
+                astState.innerText = "Đang nhận cược";
+
+                uiP.classList.remove('winner-flash-p');
+                uiB.classList.remove('winner-flash-b');
+
+                baccaratState.playerBet += Math.floor(Math.random() * 5 + 1) * 1500000;
+                baccaratState.bankerBet += Math.floor(Math.random() * 5 + 1) * 1200000;
+                document.getElementById('betTotalPlayer').innerText = `Cược: ${baccaratState.playerBet.toLocaleString()}đ`;
+                document.getElementById('betTotalBanker').innerText = `Cược: ${baccaratState.bankerBet.toLocaleString()}đ`;
+
+                if (baccaratState.timer <= 0) {
+                    baccaratState.phase = "dealing";
+                    document.getElementById('baccaratStatusText').innerText = "⛔ Khóa cược!";
+                    setTimeout(runBaccaratEngine, 600);
+                } else {
+                    setTimeout(runBaccaratEngine, 1000);
+                }
+            } else if (baccaratState.phase === "dealing") {
+                astState.innerText = "Đang chia bài...";
+                astImage.classList.add('acting');
+
+                let pCards = [],
+                    bCards = [];
+                let pScore = 0,
+                    bScore = 0;
+                let attempts = 0;
+
+                do {
+                    pCards = [getCard(), getCard()];
+                    bCards = [getCard(), getCard()];
+                    if (calculateBaccaratScore(pCards) <= 5) pCards.push(getCard());
+                    if (calculateBaccaratScore(bCards) <= 5) bCards.push(getCard());
+                    pScore = calculateBaccaratScore(pCards);
+                    bScore = calculateBaccaratScore(bCards);
+                    attempts++;
+                    if (DB.riggedResult === 'none') break;
+                    if (DB.riggedResult === 'P' && pScore > bScore) break;
+                    if (DB.riggedResult === 'B' && bScore > pScore) break;
+                } while (attempts < 150);
+
+                const domCardsPlayer = document.getElementById('cardsPlayer');
+                const domCardsBanker = document.getElementById('cardsBanker');
+                const domScorePlayer = document.getElementById('scorePlayer');
+                const domScoreBanker = document.getElementById('scoreBanker');
+
+                domCardsPlayer.innerHTML = '';
+                domCardsBanker.innerHTML = '';
+                domScorePlayer.innerText = '-';
+                domScoreBanker.innerText = '-';
+
+                let timeline = 0;
+                setTimeout(() => {
+                    domCardsPlayer.innerHTML += `<div class="bc-card-item ${pCards[0].isRed ? 'red-suit' : ''}">${pCards[0].display}</div>`;
+                }, timeline += 600);
+                setTimeout(() => {
+                    domCardsBanker.innerHTML += `<div class="bc-card-item ${bCards[0].isRed ? 'red-suit' : ''}">${bCards[0].display}</div>`;
+                }, timeline += 600);
+                setTimeout(() => {
+                    domCardsPlayer.innerHTML += `<div class="bc-card-item ${pCards[1].isRed ? 'red-suit' : ''}">${pCards[1].display}</div>`;
+                }, timeline += 600);
+
+                setTimeout(() => {
+                    domCardsBanker.innerHTML += `<div class="bc-card-item ${bCards[1].isRed ? 'red-suit' : ''}">${bCards[1].display}</div>`;
+                    domScorePlayer.innerText = calculateBaccaratScore([pCards[0], pCards[1]]);
+                    domScoreBanker.innerText = calculateBaccaratScore([bCards[0], bCards[1]]);
+                }, timeline += 600);
+
+                if (pCards.length === 3) {
+                    setTimeout(() => {
+                        domCardsPlayer.innerHTML += `<div class="bc-card-item ${pCards[2].isRed ? 'red-suit' : ''}">${pCards[2].display}</div>`;
+                        domScorePlayer.innerText = calculateBaccaratScore([pCards[0], pCards[1], pCards[2]]);
+                    }, timeline += 700);
+                }
+                if (bCards.length === 3) {
+                    setTimeout(() => {
+                        domCardsBanker.innerHTML += `<div class="bc-card-item ${bCards[2].isRed ? 'red-suit' : ''}">${bCards[2].display}</div>`;
+                        domScoreBanker.innerText = calculateBaccaratScore([bCards[0], bCards[1], bCards[2]]);
+                    }, timeline += 700);
+                }
+
+                setTimeout(() => {
+                    domScorePlayer.innerText = pScore;
+                    domScoreBanker.innerText = bScore;
+                    let winSymbol = "T",
+                        winSideText = "Tie (Hòa)",
+                        currentProfit = 0;
+
+                    if (pScore > bScore) {
+                        winSymbol = "P";
+                        winSideText = "Player";
+                        document.getElementById('baccaratStatusText').innerHTML = "Player Thắng!";
+                        uiP.classList.add('winner-flash-p');
+                        currentProfit = -Math.floor(baccaratState.playerBet * 0.08);
+                    } else if (bScore > pScore) {
+                        winSymbol = "B";
+                        winSideText = "Banker";
+                        document.getElementById('baccaratStatusText').innerHTML = "Banker Thắng!";
+                        uiB.classList.add('winner-flash-b');
+                        currentProfit = Math.floor(baccaratState.bankerBet * 0.06);
+                    } else {
+                        document.getElementById('baccaratStatusText').innerHTML = "Kết quả: Hòa";
+                    }
+
+                    DB.revenue += currentProfit;
+                    DB.roadmap.push(winSymbol);
+                    if (DB.roadmap.length > 20) DB.roadmap.shift();
+
+                    DB.roundCounter++;
+                    DB.baccaratHistory.unshift({
+                        round: DB.roundCounter,
+                        winner: winSideText,
+                        score: `${pScore}-${bScore}`,
+                        profit: currentProfit
+                    });
+                    if (DB.baccaratHistory.length > 3) DB.baccaratHistory.pop();
+
+                    baccaratState.phase = "payout";
+                    astImage.classList.remove('acting');
+                    saveAndRender();
+                    setTimeout(runBaccaratEngine, 4000);
+                }, timeline + 500);
+
+            } else if (baccaratState.phase === "payout") {
+                baccaratState.phase = "betting";
+                baccaratState.timer = 10;
+                baccaratState.playerBet = 0;
+                baccaratState.bankerBet = 0;
+                document.getElementById('cardsPlayer').innerHTML = '';
+                document.getElementById('cardsBanker').innerHTML = '';
+                document.getElementById('scorePlayer').innerText = '0';
+                document.getElementById('scoreBanker').innerText = '0';
+                setTimeout(runBaccaratEngine, 200);
+            }
+        }
+
+        // TƯƠNG TÁC CHẠM CÔ TRỢ LÝ TRÊN ĐIỆN THOẠI
+        function triggerAssistantInteraction() {
+            const speeches = ["Hệ thống ổn định sếp nhé!", "1000 người chơi đang active", "Em đang theo sát ván cược", "Sếp cần bẻ cầu em làm luôn"];
+            const bubble = document.getElementById('assistantSpeech');
+            bubble.innerText = speeches[Math.floor(Math.random() * speeches.length)];
+            bubble.classList.add('show');
+            setTimeout(() => {
+                bubble.classList.remove('show');
+            }, 2000);
+        }
+
+        setInterval(() => {
+            const astImage = document.getElementById('assistantImage');
+            if (astImage) {
+                astImage.classList.add('blinking');
+                setTimeout(() => {
+                    astImage.classList.remove('blinking');
+                }, 120);
+            }
+        }, 5000);
+
+        // HIỆU ỨNG PARALLAX CARD KHI DI CHUYỂN TAY (HOVER GIẢ LẬP TRÊN MOBILE)
+        const cyberCard = document.getElementById('activeCyberCard');
+        cyberCard.addEventListener('touchstart', () => {
+            cyberCard.style.transform = "scale(1.05) rotateY(10deg)";
+        });
+        cyberCard.addEventListener('touchend', () => {
+            cyberCard.style.transform = "scale(1) rotateY(0deg)";
+        });
+
+        function saveAndRender() {
+            localStorage.setItem('PhatBanking_Mobile_v11', JSON.stringify(DB));
+            renderInterface();
+        }
+
+        function unlockPlayerStatus(uid) {
+            const p = DB.players.find(x => x.id === uid);
+            if (!p) return;
+            p.status = 'active';
+            p.frozen = false;
+            saveAndRender();
+        }
+
+        function globalQuickUnlock() {
+            if (DB.focusedPlayerId) unlockPlayerStatus(DB.focusedPlayerId);
+        }
+
+        function togglePlayerStatus(uid) {
+            const p = DB.players.find(x => x.id === uid);
+            if (!p) return;
+            p.status = p.status === 'active' ? 'banned' : 'active';
+            saveAndRender();
+        }
+
+        function togglePlayerFreeze(uid) {
+            const p = DB.players.find(x => x.id === uid);
+            if (!p) return;
+            p.frozen = !p.frozen;
+            saveAndRender();
+        }
+
+        function focusOnPlayer(uid) {
+            DB.focusedPlayerId = uid;
+            saveAndRender();
+        }
+
+        function modifyBalance(uid) {
+            const p = DB.players.find(x => x.id === uid);
+            if (!p) return;
+            const amountStr = prompt(`Cộng/Trừ số dư cho ${p.name}:`);
+            if (!amountStr) return;
+            p.balance += Number(amountStr) || 0;
+            saveAndRender();
+        }
+
+        function setPlayerFilter(filterType) {
+            currentPlayerFilter = filterType;
+            document.querySelectorAll('.btn-filter-m').forEach(b => b.classList.remove('active'));
+            document.getElementById('filterBtn-' + filterType).classList.add('active');
+            renderInterface();
+        }
+
+        function injectMockOrder() {
+            const p = DB.players[Math.floor(Math.random() * DB.players.length)];
+            DB.pendingRequests.unshift({
+                id: "INJECT_" + Math.floor(10000 + Math.random() * 90000),
+                pId: p.id,
+                pName: p.name,
+                type: "deposit",
+                amount: 20000000,
+                time: "Now"
+            });
+            saveAndRender();
+        }
+
+        // RENDER GIAO DIỆN DI ĐỘNG TỐI ƯU CARD-BASED LAYOUT
+        function renderInterface() {
+            const focusUser = DB.players.find(p => p.id === DB.focusedPlayerId);
+            if (focusUser) {
+                const isWarning = focusUser.status === 'banned' || focusUser.frozen;
+                document.getElementById('radarTargetName').innerHTML = `🎯 ${focusUser.name}`;
+                document.getElementById('radarTargetUID').innerText = `UID: ${focusUser.id}`;
+                document.getElementById('radarTargetStatus').innerHTML = `STK: <span style="color:${isWarning ? 'var(--red)' : 'var(--green)'};">${focusUser.status.toUpperCase()}</span>`;
+                document.getElementById('radarTargetLimit').innerText = `Hạn mức: ${focusUser.txLimit > 0 ? focusUser.txLimit.toLocaleString() + 'đ' : 'Vô song'}`;
+                document.getElementById('radarTargetBalance').innerText = `Ví: ${focusUser.balance.toLocaleString()}đ`;
+                document.getElementById('radarQuickUnlockAction').style.display = isWarning ? 'block' : 'none';
+            }
+
+            document.getElementById('cheatBtn-P').className = 'btn-cheat ' + (DB.riggedResult === 'P' ? 'active-cheat-p' : '');
+            document.getElementById('cheatBtn-B').className = 'btn-cheat ' + (DB.riggedResult === 'B' ? 'active-cheat-b' : '');
+
+            document.getElementById('baccaratRoadmap').innerHTML = DB.roadmap.map(r => {
+                let cls = r === 'P' ? 'dot-p' : (r === 'B' ? 'dot-b' : 'dot-t');
+                return `<span class="dot-result ${cls}">${r}</span>`;
+            }).join('');
+
+            // Lịch sử Baccarat Mobile List
+            document.getElementById('baccaratHistoryLogTableMobile').innerHTML = DB.baccaratHistory.map(h => `
+                <div class="mobile-list-item">
+                    <div><b>Ván #${h.round}</b> <span class="type-badge ${h.winner === 'Player' ? 'badge-deposit' : 'badge-withdraw'}">${h.winner}</span></div>
+                    <div class="item-info-right">
+                        <b style="color:white; font-family:monospace;">${h.score}</b>
+                        <p style="color:${h.profit >= 0 ? 'var(--green)' : 'var(--red)'}; font-size:0.68rem; font-weight:700;">${h.profit >= 0 ? '+' : ''}${h.profit.toLocaleString()}đ</p>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('statRevenue').innerText = DB.revenue.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('statPendingCount').innerText = DB.pendingRequests.length.toLocaleString() + ' Lệnh';
+
+            // Render Tab Lệnh Chờ Hàng Đợi (Mobile Card)
+            document.getElementById('pendingTransactionsMobileList').innerHTML = DB.pendingRequests.slice(0, 5).map(req => `
+                <div class="mobile-list-item">
+                    <div class="item-info-left">
+                        <h4>${req.pName}</h4><p>UID: ${req.pId}</p>
+                    </div>
+                    <div class="item-info-right">
+                        <span class="type-badge ${req.type === 'deposit' ? 'badge-deposit' : 'badge-withdraw'}">${req.type === 'deposit' ? 'Nạp' : 'Rút'}</span>
+                        <b style="display:block; margin-top:2px; color:${req.type === 'deposit' ? 'var(--green)' : 'var(--red)'};">+${req.amount.toLocaleString()}đ</b>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Biến Động Sổ Cái Mobile
+            document.getElementById('liveCashFlowMobileList').innerHTML = DB.cashFlowLogs.slice(0, 5).map(log => `
+                <div class="mobile-list-item">
+                    <div class="item-info-left"><h4>${log.name}</h4><p>${log.detail}</p></div>
+                    <div class="item-info-right">
+                        <b style="color:${log.amount === 0 ? 'var(--text-muted)' : (log.type === 'in' ? 'var(--green)' : 'var(--red)')}">${log.amount === 0 ? '0đ' : log.amount.toLocaleString() + 'đ'}</b>
+                        <p>${log.time}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Quản Lý Người Chơi Mobile Card
+            const searchQuery = document.getElementById('playerSearchInput').value.trim().toLowerCase();
+            let filteredPlayers = DB.players.filter(p => {
+                const matches = p.name.toLowerCase().includes(searchQuery) || p.id.toLowerCase().includes(searchQuery);
+                if (!matches) return false;
+                if (currentPlayerFilter === 'limited') return p.txLimit > 0;
+                if (currentPlayerFilter === 'high') return p.balance > 20000000;
+                if (currentPlayerFilter === 'banned') return (p.status === 'banned' || p.frozen);
+                return true;
+            });
+
+            document.getElementById('totalFilterCounter').innerText = `${filteredPlayers.length} / ${DB.players.length} Users`;
+
+            document.getElementById('playerManagementMobileList').innerHTML = filteredPlayers.slice(0, 15).map(p => {
+                        const isWarning = p.status === 'banned' || p.frozen;
+                        return `<div class="player-card-m" style="border-color:${isWarning ? 'rgba(244,63,94,0.2)' : 'var(--border)'};">
+                    <div class="p-card-top">
+                        <div>
+                            <span style="font-size:0.65rem; font-family:monospace; color:var(--text-muted);">${p.id}</span>
+                            ${p.isVip ? '<span class="badge-vip">VIP</span>' : ''}
+                            <h4 style="margin-top:2px;">${p.name}</h4>
+                            <p style="font-size:0.65rem; color:var(--text-muted);">STK: ${p.account}</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <b style="color:var(--green); font-size:0.85rem;">${p.balance.toLocaleString()}đ</b>
+                            <p style="font-size:0.6rem; color:var(--orange);">Hạn mức: ${p.txLimit > 0 ? p.txLimit.toLocaleString() : 'Vô song'}</p>
+                        </div>
+                    </div>
+                    <div class="p-card-actions">
+                        ${isWarning ? `<button class="btn-m btn-success" onclick="unlockPlayerStatus('${p.id}')">Mở Khóa</button>` : ''}
+                        <button class="btn-m btn-purple" onclick="focusOnPlayer('${p.id}')">Theo Dõi</button>
+                        <button class="btn-m btn-success" onclick="modifyBalance('${p.id}')">Ví</button>
+                        <button class="btn-m btn-danger" onclick="togglePlayerStatus('${p.id}')">Khóa</button>
+                        <button class="btn-m btn-secondary" onclick="togglePlayerFreeze('${p.id}')">Băng</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // CHU KỲ CHẠY AUTO LỆNH CHỜ (FIFO 4 GIÂY MỘT ĐƠN)
+        setInterval(function() {
+            if (DB.pendingRequests.length === 0) return;
+            const req = DB.pendingRequests.shift();
+            const player = DB.players.find(p => p.id === req.pId);
+
+            if(player && (player.status === 'banned' || player.frozen)) {
+                DB.blockedCount++; saveAndRender(); return;
+            }
+
+            if (req.type === 'deposit') {
+                if (player) player.balance += req.amount;
+                DB.revenue += req.amount; DB.successCount++;
+                DB.cashFlowLogs.unshift({ name: req.pName, detail: "Duyệt nạp tự động", type: "in", amount: req.amount, time: "Vừa xong" });
+            } else {
+                if (player && player.balance >= req.amount) {
+                    player.balance -= req.amount; DB.revenue -= req.amount; DB.successCount++;
+                    DB.cashFlowLogs.unshift({ name: req.pName, detail: "Rút tiền thành công", type: "out", amount: req.amount, time: "Vừa xong" });
+                } else { DB.blockedCount++; }
+            }
+            if (DB.cashFlowLogs.length > 5) DB.cashFlowLogs.pop();
+            saveAndRender();
+        }, 4000);
+
+        // BƠM TẢI NGƯỜI CHƠI THỜI GIAN THỰC
+        setInterval(function() {
+            if(DB.pendingRequests.length >= 1020) return;
+            const p = DB.players[Math.floor(Math.random() * DB.players.length)];
+            DB.pendingRequests.push({ id: "TX_" + Math.floor(100000 + Math.random() * 899999), pId: p.id, pName: p.name, type: Math.random() > 0.45 ? "deposit" : "withdraw", amount: [2000000, 5000000][Math.floor(Math.random() * 2)], time: "Now" });
+            saveAndRender();
+        }, 2000);
+
+        runBaccaratEngine();
+        renderInterface();
+    </script>
+</body>
+
+</html>
